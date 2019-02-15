@@ -127,10 +127,14 @@ class Modular(AutonomousStateMachine):
         pass
 
     @state
-    def deliver_ball_cargo(self):
+    def deliver_ball_cargo(self, initial_call):
         """
         Insert  a ball into cargo ship opening.
         """
-        pass
+        if initial_call:
+            self.follower.follow_trajectory('cargo_ship')
+
+        if not self.follower.is_following('cargo_ship'):
+            self.done()  # If using mutliple states use self.next_state(name)
 
     # Add more states as needed
