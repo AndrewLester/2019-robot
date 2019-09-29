@@ -14,7 +14,8 @@ class TrajectoryFollower:
     WHEEL_DIAMETER = 0.5
     KV = tunable(1.0269)
     KA = tunable(0.0031)
-    ANGLE_CONSTANT = tunable(0.8)
+    ANGLE_KP = tunable(-0.01)
+    ANGLE_KD = tunable(-0.5)
 
     drive: drive.Drive
     navx: navx.AHRS
@@ -32,8 +33,8 @@ class TrajectoryFollower:
         self.left_follower = pf.followers.EncoderFollower(None)
         self.right_follower = pf.followers.EncoderFollower(None)
 
-        self.left_follower.configurePIDVA(1.0, 0, 0, self.KV, self.KA)
-        self.right_follower.configurePIDVA(1.0, 0, 0, self.KV, self.KA)
+        self.left_follower.configurePIDVA(0.5, 0, 0.1, self.KV, self.KA)
+        self.right_follower.configurePIDVA(0.5, 0, 0.1, self.KV, self.KA)
 
         self._cofigure_encoders()
 
@@ -80,17 +81,14 @@ class TrajectoryFollower:
         left = self.left_follower.calculate(self.l_encoder.get())
         right = self.right_follower.calculate(self.r_encoder.get())
 
-        gyro_heading = (
-            -self.navx.getAngle()
-        )  # Assuming the gyro is giving a value in degrees
-        desired_heading = pf.r2d(
-            self.left_follower.getHeading()
-        )  # Should also be in degrees
+        gyro_heading = self.navx.getAngle()  # Assuming the gyro is giving a value in degrees
+        desired_heading = pf.r2d(self.left_follower.getHeading())  # Should also be in degrees
 
         # This is a poor man's P controller
         angle_difference = pf.boundHalfDegrees(desired_heading - gyro_heading)
-        # turn = (1.1 * (-1.0 / 80.0) * angle_difference) + (0.05 * (angle_difference - self.last_difference))
-        turn = self.ANGLE_CONSTANT * (-1.0 / 80.0) * angle_difference
+        print(f'{desired_heading} - {gyro_heading}')
+        turn = (self.ANGLE_KP * angle_difference) + (self.ANGLE_KD * (angle_difference - self.last_difference))
+        # turn = self.ANGLE_CONSTANT * (-1.0 / 80.0) * angle_difference
         # turn = 0
 
         self.last_difference = angle_difference
@@ -98,7 +96,7 @@ class TrajectoryFollower:
         left += turn
         right -= turn
 
-        # print('Drive:', left, right)
+        print('Drive:', left, right)
         # print('Encoders:', self.l_encoder.get(), self.r_encoder.get())
 
         self.drive.move_tank(left, right)

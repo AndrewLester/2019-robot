@@ -14,6 +14,10 @@ class PhysicsEngine:
         """
         self.physics_controller = physics_controller
         self.physics_controller.add_device_gyro_channel('navxmxp_spi_4_angle')
+        self.encoder_ticks = 1440 / (0.5 * math.pi)
+        self.drivetrain = drivetrains.MecanumDrivetrain(y_wheelbase=1.83, x_wheelbase=0.75, speed=3.4)
+        self.left_encoder = 0
+        self.right_encoder = 0
 
     def update_sim(self, hal_data, now, tm_diff):
         """
@@ -30,8 +34,12 @@ class PhysicsEngine:
         rf_motor = -hal_data['CAN'][20]['value']
         rr_motor = -hal_data['CAN'][25]['value']
 
-        vx, vy, vw = drivetrains.mecanum_drivetrain(
-            lr_motor, rr_motor, lf_motor, rf_motor
-        )
+        vx, vy, vw = self.drivetrain.get_vector(lr_motor, rr_motor, lf_motor, rf_motor)
 
         self.physics_controller.vector_drive(vx, vy, vw, tm_diff)
+
+        self.left_encoder += self.drivetrain.lr_speed * tm_diff
+        self.right_encoder += self.drivetrain.rr_speed * tm_diff
+
+        hal_data['encoder'][0]['count'] = int(self.right_encoder * self.encoder_ticks)
+        hal_data['encoder'][1]['count'] = int(self.left_encoder * self.encoder_ticks)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-./format_test.sh
+./test_format.sh
 
-./robot_test.sh
+./test_robot.sh

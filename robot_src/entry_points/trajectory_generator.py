@@ -4,6 +4,7 @@ import pickle
 import pathfinder as pf
 import wpilib
 from . import robotpy_entry_point
+import math
 
 
 WHEELBASE_WIDTH = 1.83  # In feet
@@ -16,7 +17,7 @@ MAX_GENERATION_JERK = 15
 trajectories = {
     "charge": [
         pf.Waypoint(0, 0, 0),
-        pf.Waypoint(1.5, 0, 0)
+        pf.Waypoint(3, 0, 0)
     ],
     "diagonal_higher": [
         pf.Waypoint(0, 0, 0),  # Waypoints are relative to first, so start at 0, 0, 0
@@ -28,11 +29,11 @@ trajectories = {
     ],
     "left-side": [
         pf.Waypoint(0, 0, 0),
-        pf.Waypoint(8.33, 6.25, 0)
+        pf.Waypoint(6, 6, math.pi / 4)
     ],
-    "diagonal": [
+    "turn": [
         pf.Waypoint(0, 0, 0),  # Waypoints are relative to first, so start at 0, 0, 0
-        pf.Waypoint(15, 5, 0)
+        pf.Waypoint(0.5, 0, math.pi / 4)
     ]
 }
 

@@ -9,7 +9,7 @@ install:
 jobs:
   include:
     - stage: test
-      script: ./robot_test.sh
+      script: ./test_robot.sh
     - stage: format
-      script: ./format_test.sh
+      script: ./test_format.sh
 cache: pip
