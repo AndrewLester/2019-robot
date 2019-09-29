@@ -1,7 +1,7 @@
 from magicbot.state_machine import state, AutonomousStateMachine
 from magicbot import tunable
 from networktables.util import ntproperty
-from components import drive
+from robot_src.components import drive
 import json
 
 

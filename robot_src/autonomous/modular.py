@@ -1,5 +1,5 @@
 from magicbot.state_machine import state, timed_state, AutonomousStateMachine
-from components import drive
+from robot_src.components import drive
 
 from magicbot import tunable
 from networktables.util import ntproperty

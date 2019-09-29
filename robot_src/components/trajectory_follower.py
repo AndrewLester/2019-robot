@@ -2,8 +2,7 @@ import pathfinder as pf
 import navx
 from typing import Tuple, List
 import wpilib
-from wpilib import drive
-from components import drive
+from . import drive
 from magicbot.magic_tunable import tunable
 from ctre.wpi_talonsrx import WPI_TalonSRX
 
@@ -43,6 +42,9 @@ class TrajectoryFollower:
         Follow a specified trajectory.
         :param trajectory_name: The name of the trajectory to follow.
         """
+        if trajectory_name not in self.generated_trajectories.keys():
+            return
+
         print('Following Trajectory:', trajectory_name)
         self._current_trajectory = trajectory_name
         self.left_follower.setTrajectory(self.generated_trajectories[trajectory_name][0])
@@ -70,7 +72,6 @@ class TrajectoryFollower:
         """
         Calculate the movement values and move the robot.
         """
-        """
         if (self.left_follower.trajectory is None or self.right_follower.trajectory is None) or \
            (self.left_follower.isFinished() and self.right_follower.isFinished()):
             self._current_trajectory = None
@@ -97,8 +98,7 @@ class TrajectoryFollower:
         left += turn
         right -= turn
 
-        print('Drive:', left, right)
-        print('Encoders:', self.l_encoder.get(), self.r_encoder.get())
+        # print('Drive:', left, right)
+        # print('Encoders:', self.l_encoder.get(), self.r_encoder.get())
 
         self.drive.move_tank(left, right)
-    """

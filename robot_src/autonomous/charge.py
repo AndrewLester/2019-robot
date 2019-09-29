@@ -1,5 +1,5 @@
 from magicbot.state_machine import state, timed_state, AutonomousStateMachine
-from components import drive, trajectory_follower, lift
+from robot_src.components import drive, trajectory_follower, lift
 
 
 class Charge(AutonomousStateMachine):

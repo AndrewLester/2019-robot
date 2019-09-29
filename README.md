@@ -10,14 +10,14 @@ Before deploying, you must [install robotpy](http://robotpy.readthedocs.io/en/st
 
 You may then deploy code at any time:
 
-	python3 robot.py deploy
+	python3 robot_src/robot.py deploy
 
 During development of last year's robot code, we created a Bash script `deploy.sh` to automate some tasks related to code deploy. You can find that tool, `dep`, [here](https://github.com/frc1418/dep). We recommend that you make use of it to simplify your deploy process and remove pesky steps like manually changing your WiFi network.
 
 ## Testing/Simulation
 You may run the `pyfrc` simulator to test this code thus:
 
-    python3 robot.py sim
+    python3 robot_src/robot.py sim
 
 ## Controls
 We use three total joysticks to control the robot:
@@ -51,6 +51,19 @@ In the `tests` folder there is another requirements file that needs to be run. T
 
 Add `--user` at the end of that command if you do not have admin privileges.
 
+## Setting up entry points
+
+Entry points allow us to add sub-commands to the overarching RobotPY framework. To load them, move to the root directory, activate your virtual environment and run
+
+	pip install -e .
+
+This will set up the entry points that we put in place to facilitate off-robot functions of our code. So far, we use entry points for:
+* Generating motion profile trajectories (generate)
+
+These entry points can be run like so
+
+    python3 robot_src/robot.py <entry_point_name>
+
 ## Changing your `$PATH`
 
 Your `$PATH` is a variable that contains a bunch of different directories that are searched through when the computer is searching for an executable file. To run this robot code, `$HOME/Library/Python/3.6/bin` needs to be added to your `$PATH`. To do so, first run
@@ -81,7 +94,7 @@ When this is run, you should see the addition of `Library/Python/3.6/bin` at the
 
 ## File Structure
 
-    robot/
+    robot_src/
     	The robot code lives here.
         automations/
             Automatic scripts for performing common functions.
