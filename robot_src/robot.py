@@ -98,6 +98,7 @@ class Robot(magicbot.MagicRobot):
 
         # Drivetrain
         self.train = wpilib.drive.MecanumDrive(self.lf_motor, self.lr_motor, self.rf_motor, self.rr_motor)
+        self.train.setDeadband(0)
 
         # Functional motors
         self.lift_motor = WPI_TalonSRX(40)
