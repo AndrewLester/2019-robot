@@ -31,7 +31,7 @@ class Robot(magicbot.MagicRobot):
     cargo_manipulator: cargo_manipulator.CargoManipulator
     climber: climber.Climber
 
-    ENCODER_PULSE_PER_REV = 1024
+    ENCODER_PULSE_PER_REV = 256
     WHEEL_DIAMETER = 0.5
 
     """
