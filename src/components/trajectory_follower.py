@@ -11,11 +11,11 @@ class TrajectoryFollower:
     """
     Move along generated paths for autonomous
     """
-    WHEEL_DIAMETER = 0.5
-    KV = tunable(1.0269)
-    KA = tunable(0.0031)
-    ANGLE_KP = tunable(-0.01)
-    ANGLE_KD = tunable(-0.5)
+    WHEEL_DIAMETER = 0.5 # Units: Feet
+    KV = tunable(0.831)
+    KA = tunable(0.033)
+    ANGLE_KP = tunable(1)
+    ANGLE_KD = tunable(0.25)
 
     drive: drive.Drive
     navx: navx.AHRS
@@ -33,10 +33,10 @@ class TrajectoryFollower:
         self.left_follower = pf.followers.EncoderFollower(None)
         self.right_follower = pf.followers.EncoderFollower(None)
 
-        self.left_follower.configurePIDVA(0.5, 0, 0.1, self.KV, self.KA)
-        self.right_follower.configurePIDVA(0.5, 0, 0.1, self.KV, self.KA)
+        self.left_follower.configurePIDVA(1, 0, 0.1, self.KV, self.KA)
+        self.right_follower.configurePIDVA(1, 0, 0.1, self.KV, self.KA)
 
-        self._cofigure_encoders()
+        self._configure_encoders()
 
     def follow_trajectory(self, trajectory_name: str):
         """
@@ -48,17 +48,15 @@ class TrajectoryFollower:
 
         print('Following Trajectory:', trajectory_name)
         self._current_trajectory = trajectory_name
+
+        self._configure_encoders()
         self.left_follower.setTrajectory(self.generated_trajectories[trajectory_name][0])
         self.right_follower.setTrajectory(self.generated_trajectories[trajectory_name][1])
 
-        self._cofigure_encoders()
-
-    def _cofigure_encoders(self):
+    def _configure_encoders(self):
         """
         Configure the encoders for following a trajectory.
         """
-        self.l_encoder.reset()
-        self.r_encoder.reset()
         self.left_follower.configureEncoder(self.l_encoder.get(), 1024, self.WHEEL_DIAMETER)
         self.right_follower.configureEncoder(self.r_encoder.get(), 1024, self.WHEEL_DIAMETER)
 
@@ -81,20 +79,17 @@ class TrajectoryFollower:
         left = self.left_follower.calculate(self.l_encoder.get())
         right = self.right_follower.calculate(self.r_encoder.get())
 
-        gyro_heading = self.navx.getAngle()  # Assuming the gyro is giving a value in degrees
+        gyro_heading = -self.navx.getAngle()  # Assuming the gyro is giving a value in degrees
         desired_heading = pf.r2d(self.left_follower.getHeading())  # Should also be in degrees
 
-        # This is a poor man's P controller
         angle_difference = pf.boundHalfDegrees(desired_heading - gyro_heading)
-        print(f'{desired_heading} - {gyro_heading}')
+        print(f'{desired_heading} - {gyro_heading} = {angle_difference}')
         turn = (self.ANGLE_KP * angle_difference) + (self.ANGLE_KD * (angle_difference - self.last_difference))
-        # turn = self.ANGLE_CONSTANT * (-1.0 / 80.0) * angle_difference
-        # turn = 0
 
         self.last_difference = angle_difference
-
-        left += turn
-        right -= turn
+        print(f'Turn: {turn}')
+        left -= turn
+        right += turn
 
         print('Drive:', left, right)
         # print('Encoders:', self.l_encoder.get(), self.r_encoder.get())

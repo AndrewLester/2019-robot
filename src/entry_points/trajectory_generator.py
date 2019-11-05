@@ -81,6 +81,7 @@ def generate_trajectories(options, robot_class):
     generated_trajectories = {}
 
     for trajectory_name, trajectory in trajectories.items():
+        print(f'Trajectory: {trajectory_name} ...', end='')
         generated_trajectory = pf.generate(
             trajectory,
             pf.FIT_HERMITE_CUBIC,
@@ -97,6 +98,7 @@ def generate_trajectories(options, robot_class):
             modifier.getLeftTrajectory(),
             modifier.getRightTrajectory()
         )
+        print('Done')
 
     _write_trajectories(generated_trajectories)
     print('Finished.')

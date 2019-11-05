@@ -10,14 +10,14 @@ Before deploying, you must [install robotpy](http://robotpy.readthedocs.io/en/st
 
 You may then deploy code at any time:
 
-	python3 robot_src/robot.py deploy
+	python3 src/robot.py deploy
 
 During development of last year's robot code, we created a Bash script `deploy.sh` to automate some tasks related to code deploy. You can find that tool, `dep`, [here](https://github.com/frc1418/dep). We recommend that you make use of it to simplify your deploy process and remove pesky steps like manually changing your WiFi network.
 
 ## Testing/Simulation
 You may run the `pyfrc` simulator to test this code thus:
 
-    python3 robot_src/robot.py sim
+    python3 src/robot.py sim
 
 ## Controls
 We use three total joysticks to control the robot:
@@ -62,7 +62,7 @@ This will set up the entry points that we put in place to facilitate off-robot f
 
 These entry points can be run like so
 
-    python3 robot_src/robot.py <entry_point_name>
+    python3 src/robot.py <entry_point_name>
 
 ## Changing your `$PATH`
 
@@ -94,7 +94,7 @@ When this is run, you should see the addition of `Library/Python/3.6/bin` at the
 
 ## File Structure
 
-    robot_src/
+    src/
     	The robot code lives here.
         automations/
             Automatic scripts for performing common functions.

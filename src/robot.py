@@ -5,9 +5,9 @@ import wpilib.drive
 from wpilib.buttons import JoystickButton
 from robotpy_ext.control.button_debouncer import ButtonDebouncer
 # from controllers import recorder
-from robot_src.components import drive, lift, hatch_manipulator, cargo_manipulator, climber, trajectory_follower
-from robot_src.automations import seek_target
-from robot_src.entry_points.trajectory_generator import load_trajectories
+from src.components import drive, lift, hatch_manipulator, cargo_manipulator, climber, trajectory_follower
+from src.automations import seek_target
+from src.entry_points.trajectory_generator import load_trajectories
 import math
 
 import navx

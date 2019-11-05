@@ -7,7 +7,7 @@ setup(
     install_requires=['pybind11', 'robotpy-ctre', 'robotpy-navx', 'robotpy-wpilib-utilities', 'pyfrc', 'pynetworktables', 'robotpy-pathfinder'],
     entry_points={
         'robotpy': [
-          'generate=robot_src.entry_points.trajectory_generator:TrajectoryGenerator'
+          'generate=src.entry_points.trajectory_generator:TrajectoryGenerator'
         ]
     }
 )

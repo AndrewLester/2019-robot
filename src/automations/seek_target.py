@@ -1,5 +1,5 @@
 from networktables.util import ntproperty
-from robot_src.components import drive
+from src.components import drive
 
 from magicbot import StateMachine, state, timed_state
 # TODO: Use this to automate shooting process at the end and things like that
