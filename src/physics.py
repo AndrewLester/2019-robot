@@ -14,7 +14,7 @@ class PhysicsEngine:
         """
         self.physics_controller = physics_controller
         self.physics_controller.add_device_gyro_channel('navxmxp_spi_4_angle')
-        self.encoder_ticks = 1440 / (0.5 * math.pi)
+        self.encoder_ticks = 1024 / (0.5 * math.pi)
         self.drivetrain = drivetrains.MecanumDrivetrain(y_wheelbase=1.83, x_wheelbase=0.75, speed=3.4)
         self.left_encoder = 0
         self.right_encoder = 0

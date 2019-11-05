@@ -32,7 +32,7 @@ class Robot(magicbot.MagicRobot):
     climber: climber.Climber
 
     ENCODER_PULSE_PER_REV = 256
-    WHEEL_DIAMETER = 0.5
+    WHEEL_DIAMETER = 0.5 # Units: ft
 
     """
     manual_lift_control = tunable(True)

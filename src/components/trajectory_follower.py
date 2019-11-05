@@ -11,11 +11,11 @@ class TrajectoryFollower:
     """
     Move along generated paths for autonomous
     """
-    WHEEL_DIAMETER = 0.5 # Units: Feet
+    WHEEL_DIAMETER = 0.5 # Units: ft
     KV = tunable(0.831)
     KA = tunable(0.033)
-    ANGLE_KP = tunable(1)
-    ANGLE_KD = tunable(0.25)
+    ANGLE_KP = tunable(0.3)
+    ANGLE_KD = tunable(0.1)
 
     drive: drive.Drive
     navx: navx.AHRS
@@ -83,11 +83,13 @@ class TrajectoryFollower:
         desired_heading = pf.r2d(self.left_follower.getHeading())  # Should also be in degrees
 
         angle_difference = pf.boundHalfDegrees(desired_heading - gyro_heading)
-        print(f'{desired_heading} - {gyro_heading} = {angle_difference}')
-        turn = (self.ANGLE_KP * angle_difference) + (self.ANGLE_KD * (angle_difference - self.last_difference))
+        # print(f'{desired_heading} - {gyro_heading} = {angle_difference}')
+        p_error = self.ANGLE_KP * angle_difference
+        d_error = self.ANGLE_KD * (angle_difference - self.last_difference)
+        turn = p_error + d_error
 
         self.last_difference = angle_difference
-        print(f'Turn: {turn}')
+        print(f'P_ERR: {p_error} | D_ERR: {d_error} | TOTAL: {turn}')
         left -= turn
         right += turn
 
