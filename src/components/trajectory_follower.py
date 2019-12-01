@@ -85,7 +85,7 @@ class TrajectoryFollower:
         angle_difference = pf.boundHalfDegrees(desired_heading - gyro_heading)
         # print(f'{desired_heading} - {gyro_heading} = {angle_difference}')
         p_error = self.ANGLE_KP * angle_difference
-        d_error = self.ANGLE_KD * (angle_difference - self.last_difference)
+        d_error = self.ANGLE_KD * ((angle_difference - self.last_difference) / 0.02) # 0.02 is the seconds per cycle
         turn = p_error + d_error
 
         self.last_difference = angle_difference
